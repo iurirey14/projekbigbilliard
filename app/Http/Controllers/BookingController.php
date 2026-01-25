@@ -87,13 +87,20 @@ class BookingController extends Controller
 
     public function show($id)
     {
-        $booking = Booking::with('table', 'payment', 'user')->findOrFail($id);
-        
-        if ($booking->user_id !== Auth::id()) {
-            abort(403);
-        }
+        try {
+            $booking = Booking::with('table', 'payment')->findOrFail($id);
+            
+            if ($booking->user_id !== Auth::id()) {
+                abort(403);
+            }
 
-        return view('bookings.show', compact('booking'));
+            // Ensure payment exists, if not set it to null for the view
+            $payment = $booking->payment;
+
+            return view('bookings.show', compact('booking', 'payment'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat memuat pesanan: ' . $e->getMessage()]);
+        }
     }
 
     public function cancel($id)

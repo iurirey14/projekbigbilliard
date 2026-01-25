@@ -70,8 +70,7 @@
 
    <script>
     // 1. Ambil data dari PHP ke format JSON yang valid untuk JS
-    // Gunakan {!! !!} agar data tidak berubah menjadi entitas HTML
-    const tables = @json($tables->keyBy('id'));
+    const tables = {!! json_encode($tables->keyBy('id')->toArray()) !!};
 
     const tableSelect = document.querySelector('select[name="table_id"]');
     const dateInput = document.querySelector('input[name="booking_date"]');
@@ -108,13 +107,5 @@
 
     // 3. Panggil updateSummary saat halaman pertama kali dimuat
     updateSummary();
-    </script>
-    }
-
-    // 2. Tambahkan Listener dengan cara yang lebih bersih
-    [tableSelect, dateInput, startTimeInput, durationInput].forEach(input => {
-        input.addEventListener('change', updateSummary);
-        input.addEventListener('input', updateSummary);
-    });
 </script>
 @endsection

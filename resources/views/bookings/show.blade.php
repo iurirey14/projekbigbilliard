@@ -12,27 +12,27 @@
             <div class="summary">
                 <div class="summary-item">
                     <span><strong>Meja:</strong></span>
-                    <span>{{ $booking->table->table_name }}</span>
+                    <span>{{ $booking->table?->table_name ?? 'Meja tidak ditemukan' }}</span>
                 </div>
                 <div class="summary-item">
                     <span><strong>Tanggal:</strong></span>
-                    <span>{{ $booking->booking_date->format('d F Y') }}</span>
+                    <span>{{ $booking->booking_date?->format('d F Y') ?? 'Tanggal tidak ada' }}</span>
                 </div>
                 <div class="summary-item">
                     <span><strong>Waktu:</strong></span>
-                    <span>{{ $booking->start_time }} - {{ $booking->end_time }}</span>
+                    <span>{{ $booking->start_time ?? '-' }} - {{ $booking->end_time ?? '-' }}</span>
                 </div>
                 <div class="summary-item">
                     <span><strong>Durasi:</strong></span>
-                    <span>{{ $booking->duration_hours }} jam</span>
+                    <span>{{ $booking->duration_hours ?? '-' }} jam</span>
                 </div>
                 <div class="summary-item">
                     <span><strong>Harga per Jam:</strong></span>
-                    <span>Rp {{ number_format($booking->table->price_per_hour, 0, ',', '.') }}</span>
+                    <span>Rp {{ number_format($booking->table?->price_per_hour ?? 0, 0, ',', '.') }}</span>
                 </div>
                 <div class="summary-total">
                     <span><strong>Total Harga:</strong></span>
-                    <span>Rp {{ number_format($booking->total_price, 0, ',', '.') }}</span>
+                    <span>Rp {{ number_format($booking->total_price ?? 0, 0, ',', '.') }}</span>
                 </div>
             </div>
 
@@ -44,18 +44,18 @@
             </div>
         </div>
 
-        @if($payment)
+        @if($payment ?? false)
             <div class="card" style="margin-top: 2rem;">
                 <h3>Informasi Pembayaran</h3>
                 
                 <div class="summary">
                     <div class="summary-item">
                         <span><strong>Status Pembayaran:</strong></span>
-                        <span><span class="badge badge-{{ str_replace('_', '-', $payment->status) }}">{{ ucfirst(str_replace('_', ' ', $payment->status)) }}</span></span>
+                        <span><span class="badge badge-{{ str_replace('_', '-', $payment->status ?? 'pending') }}">{{ ucfirst(str_replace('_', ' ', $payment->status ?? 'pending')) }}</span></span>
                     </div>
                     <div class="summary-item">
                         <span><strong>Jumlah Pembayaran:</strong></span>
-                        <span>Rp {{ number_format($payment->amount, 0, ',', '.') }}</span>
+                        <span>Rp {{ number_format($payment->amount ?? 0, 0, ',', '.') }}</span>
                     </div>
                     @if($payment->payment_method)
                         <div class="summary-item">
@@ -66,14 +66,14 @@
                     @if($payment->paid_at)
                         <div class="summary-item">
                             <span><strong>Tanggal Pembayaran:</strong></span>
-                            <span>{{ $payment->paid_at->format('d/m/Y H:i') }}</span>
+                            <span>{{ $payment->paid_at?->format('d/m/Y H:i') ?? '-' }}</span>
                         </div>
                     @endif
                 </div>
 
-                @if($payment->status === 'pending')
+                @if($payment && $payment->status === 'pending')
                     <a href="{{ route('payments.show', $booking->id) }}" class="btn btn-success" style="margin-top: 1rem; display: inline-block;">Lakukan Pembayaran</a>
-                @elseif($payment->status === 'completed')
+                @elseif($payment && $payment->status === 'completed')
                     <a href="{{ route('payments.receipt', $booking->id) }}" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">Lihat Kwitansi</a>
                 @endif
             </div>

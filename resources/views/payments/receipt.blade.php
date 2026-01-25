@@ -15,15 +15,15 @@
                 
                 <div class="summary-item">
                     <span><strong>Nomor Transaksi:</strong></span>
-                    <span>{{ $booking->payment->transaction_id }}</span>
+                    <span>{{ $booking->payment->transaction_id ?? 'N/A' }}</span>
                 </div>
                 <div class="summary-item">
                     <span><strong>Tanggal Pembayaran:</strong></span>
-                    <span>{{ $booking->payment->paid_at->format('d F Y H:i') }}</span>
+                    <span>{{ $booking->payment->paid_at ? $booking->payment->paid_at->format('d F Y H:i') : '-' }}</span>
                 </div>
                 <div class="summary-item">
                     <span><strong>Metode Pembayaran:</strong></span>
-                    <span>{{ ucfirst(str_replace('_', ' ', $booking->payment->payment_method)) }}</span>
+                    <span>{{ $booking->payment->payment_method ? ucfirst(str_replace('_', ' ', $booking->payment->payment_method)) : '-' }}</span>
                 </div>
             </div>
 

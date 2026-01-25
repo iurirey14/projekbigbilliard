@@ -24,8 +24,8 @@
                     @foreach($payments as $payment)
                         <tr>
                             <td>{{ $payment->transaction_id ?? '-' }}</td>
-                            <td>{{ $payment->booking->table->table_name }}</td>
-                            <td>{{ $payment->booking->booking_date->format('d/m/Y') }}</td>
+                            <td>{{ $payment->booking && $payment->booking->table ? $payment->booking->table->table_name : '-' }}</td>
+                            <td>{{ $payment->booking ? $payment->booking->booking_date->format('d/m/Y') : '-' }}</td>
                             <td>Rp {{ number_format($payment->amount, 0, ',', '.') }}</td>
                             <td>{{ $payment->payment_method ? ucfirst(str_replace('_', ' ', $payment->payment_method)) : '-' }}</td>
                             <td>

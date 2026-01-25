@@ -11,15 +11,23 @@ class PaymentController extends Controller
 {
     public function show($bookingId)
     {
-        $booking = Booking::with('table', 'payment')->findOrFail($bookingId);
+        try {
+            $booking = Booking::with('table', 'payment')->findOrFail($bookingId);
 
-        if ($booking->user_id !== Auth::id()) {
-            abort(403);
+            if ($booking->user_id !== Auth::id()) {
+                abort(403);
+            }
+
+            $payment = $booking->payment;
+            
+            if (!$payment) {
+                return back()->withErrors(['error' => 'Pembayaran tidak ditemukan untuk booking ini.']);
+            }
+
+            return view('payments.show', compact('booking', 'payment'));
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
-
-        $payment = $booking->payment ?? Payment::where('booking_id', $bookingId)->first();
-
-        return view('payments.show', compact('booking', 'payment'));
     }
 
     public function process(Request $request, $bookingId)
