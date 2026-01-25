@@ -4,10 +4,26 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BilliardTableController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+// Auth Routes
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login')->middleware('guest');
+
+Route::post('/login', [AuthController::class, 'login'])->name('login.post')->middleware('guest');
+
+Route::get('/register', function () {
+    return view('auth.register');
+})->name('register')->middleware('guest');
+
+Route::post('/register', [AuthController::class, 'register'])->name('register.post')->middleware('guest');
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
     // Billiard Tables Routes
