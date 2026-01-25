@@ -38,10 +38,11 @@ class BookingController extends Controller
         ]);
 
         $table = BilliardTable::find($validated['table_id']);
+        $durationHours = (int)$validated['duration_hours'];
         
         // Calculate end time
         $startTime = \Carbon\Carbon::createFromFormat('H:i', $validated['start_time']);
-        $endTime = $startTime->copy()->addHours($validated['duration_hours']);
+        $endTime = $startTime->copy()->addHours($durationHours);
 
         // Check for conflicts
         $conflictingBookings = Booking::where('table_id', $validated['table_id'])
@@ -61,7 +62,7 @@ class BookingController extends Controller
             return back()->withErrors(['error' => 'Waktu booking tidak tersedia untuk meja ini.']);
         }
 
-        $totalPrice = $table->price_per_hour * $validated['duration_hours'];
+        $totalPrice = $table->price_per_hour * $durationHours;
 
         $booking = Booking::create([
             'user_id' => Auth::id(),
@@ -69,7 +70,7 @@ class BookingController extends Controller
             'booking_date' => $validated['booking_date'],
             'start_time' => $validated['start_time'],
             'end_time' => $endTime->format('H:i'),
-            'duration_hours' => $validated['duration_hours'],
+            'duration_hours' => $durationHours,
             'total_price' => $totalPrice,
             'notes' => $validated['notes'] ?? null,
         ]);

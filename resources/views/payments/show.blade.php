@@ -36,14 +36,18 @@
         @else
         <div class="card" style="background: #fee; padding: 1.5rem; text-align: center;">
             <p style="color: #c33; margin: 0;"><strong>Kesalahan: Pembayaran tidak ditemukan</strong></p>
-            <a href="{{ route('bookings.show', $booking->id) }}" style="display: inline-block; margin-top: 1rem;" class="btn btn-primary">Kembali ke Pesanan</a>
+            @if($booking ?? false)
+                <a href="{{ route('bookings.show', $booking->id) }}" style="display: inline-block; margin-top: 1rem;" class="btn btn-primary">Kembali ke Pesanan</a>
+            @else
+                <a href="{{ route('bookings.index') }}" style="display: inline-block; margin-top: 1rem;" class="btn btn-primary">Kembali ke Pesanan Saya</a>
+            @endif
         </div>
         @endif
 
         @if($payment)
             <h3>Pilih Metode Pembayaran</h3>
             
-            <form method="POST" action="{{ route('payments.process', $booking->id) }}">
+            <form method="POST" action="{{ route('payments.process', $booking?->id ?? 0) }}">
                 @csrf
                 
                 <div class="form-group">
@@ -89,7 +93,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 1.5rem; padding: 1rem;">Lanjutkan Pembayaran</button>
-                <a href="{{ route('bookings.show', $booking->id) }}" class="btn" style="width: 100%; margin-top: 1rem; padding: 1rem; text-align: center; background: #999;">Kembali</a>
+                <a href="{{ route('bookings.show', $booking?->id ?? 0) }}" class="btn" style="width: 100%; margin-top: 1rem; padding: 1rem; text-align: center; background: #999;">Kembali</a>
             </form>
         @endif
     </div>

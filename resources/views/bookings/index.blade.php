@@ -23,14 +23,14 @@
                 <tbody>
                     @foreach($bookings as $booking)
                         <tr>
-                            <td>{{ $booking->table->table_name }}</td>
-                            <td>{{ $booking->booking_date->format('d/m/Y') }}</td>
-                            <td>{{ $booking->start_time }} - {{ $booking->end_time }}</td>
-                            <td>{{ $booking->duration_hours }} jam</td>
-                            <td>Rp {{ number_format($booking->total_price, 0, ',', '.') }}</td>
+                            <td>{{ $booking->table?->table_name ?? 'Meja tidak ditemukan' }}</td>
+                            <td>{{ $booking->booking_date?->format('d/m/Y') ?? '-' }}</td>
+                            <td>{{ $booking->start_time ?? '-' }} - {{ $booking->end_time ?? '-' }}</td>
+                            <td>{{ $booking->duration_hours ?? '-' }} jam</td>
+                            <td>Rp {{ number_format($booking->total_price ?? 0, 0, ',', '.') }}</td>
                             <td>
-                                <span class="badge badge-{{ str_replace('_', '-', $booking->status) }}">
-                                    {{ ucfirst(str_replace('_', ' ', $booking->status)) }}
+                                <span class="badge badge-{{ str_replace('_', '-', $booking->status ?? 'pending') }}">
+                                    {{ ucfirst(str_replace('_', ' ', $booking->status ?? 'pending')) }}
                                 </span>
                             </td>
                             <td>
