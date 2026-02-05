@@ -13,42 +13,42 @@ class BilliardTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // Hapus data lama jika ada
-        BilliardTable::truncate();
+        // Hapus data lama jika ada menggunakan query builder untuk menghindari foreign key constraint
+        \DB::table('billiard_tables')->delete();
 
         // Buat data meja billiard
         $tables = [
             [
                 'table_name' => 'Meja Premium A',
-                'table_type' => 'Premium',
+                'table_number' => 1,
                 'status' => 'available',
                 'price_per_hour' => 50000,
                 'description' => 'Meja billiard premium dengan kondisi terbaik',
             ],
             [
                 'table_name' => 'Meja Premium B',
-                'table_type' => 'Premium',
+                'table_number' => 2,
                 'status' => 'available',
                 'price_per_hour' => 50000,
                 'description' => 'Meja billiard premium dengan kondisi terbaik',
             ],
             [
                 'table_name' => 'Meja Standard 1',
-                'table_type' => 'Standard',
+                'table_number' => 3,
                 'status' => 'available',
                 'price_per_hour' => 30000,
                 'description' => 'Meja billiard standar kualitas bagus',
             ],
             [
                 'table_name' => 'Meja Standard 2',
-                'table_type' => 'Standard',
+                'table_number' => 4,
                 'status' => 'available',
                 'price_per_hour' => 30000,
                 'description' => 'Meja billiard standar kualitas bagus',
             ],
             [
                 'table_name' => 'Meja VIP Eksklusif',
-                'table_type' => 'VIP',
+                'table_number' => 5,
                 'status' => 'available',
                 'price_per_hour' => 75000,
                 'description' => 'Meja billiard VIP dengan fasilitas lengkap',

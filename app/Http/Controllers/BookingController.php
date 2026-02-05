@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * ============================================================================
+ * BookingController - Controller untuk mengelola booking meja billiard
+ * ============================================================================
+ * Controller ini bertanggung jawab atas:
+ * - Menampilkan daftar booking pengguna
+ * - Membuat booking baru
+ * - Menampilkan detail booking
+ * - Membatalkan booking
+ * ============================================================================
+ */
+
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
@@ -10,23 +22,61 @@ use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
+    /**
+     * index - Menampilkan daftar booking milik pengguna yang login
+     * @return \Illuminate\View\View - View dengan daftar booking pengguna
+     * 
+     * Proses:
+     * 1. Ambil user yang sedang login
+     * 2. Cari semua booking milik user, dengan relasi table dan payment
+     * 3. Urutkan berdasarkan tanggal booking terbaru
+     * 4. Pass data ke view bookings.index
+     */
     public function index()
     {
+        // Ambil user yang sedang login
         $user = Auth::user();
+        // Cari booking milik user, load relasi table dan payment
+        // orderBy descending untuk menampilkan booking terbaru dulu
         $bookings = Booking::where('user_id', $user->id)
             ->with('table', 'payment')
             ->orderBy('booking_date', 'desc')
             ->get();
 
+        // Pass data ke view dengan variabel 'bookings'
         return view('bookings.index', compact('bookings'));
     }
 
+    /**
+     * create - Menampilkan form untuk membuat booking baru
+     * @return \Illuminate\View\View - View form create booking
+     * 
+     * Proses:
+     * 1. Ambil semua meja yang status 'available'
+     * 2. Pass data ke view bookings.create untuk ditampilkan dalam select list
+     */
     public function create()
     {
+        // Ambil meja yang tersedia (status = available)
         $tables = BilliardTable::where('status', 'available')->get();
+        // Pass data ke view
         return view('bookings.create', compact('tables'));
     }
 
+    /**
+     * store - Menyimpan booking baru ke database
+     * @param Request $request - Form data dari booking create
+     * @return \Illuminate\Http\RedirectResponse - Redirect ke payment page
+     * 
+     * Proses:
+     * 1. Validasi input: table_id, booking_date, start_time, duration, notes
+     * 2. Hitung waktu berakhir booking
+     * 3. Cek conflict dengan booking lain di waktu yang sama
+     * 4. Hitung total harga
+     * 5. Simpan booking ke database
+     * 6. Buat payment record dengan status pending
+     * 7. Redirect ke halaman pembayaran
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -34,6 +84,7 @@ class BookingController extends Controller
             'booking_date' => 'required|date|after:today',
             'start_time' => 'required|date_format:H:i',
             'duration_hours' => 'required|integer|min:1|max:12',
+            'category' => 'required|in:regular,vip',
             'notes' => 'nullable|string|max:500',
         ]);
 
@@ -71,6 +122,7 @@ class BookingController extends Controller
             'start_time' => $validated['start_time'],
             'end_time' => $endTime->format('H:i'),
             'duration_hours' => $durationHours,
+            'category' => $validated['category'],
             'total_price' => $totalPrice,
             'notes' => $validated['notes'] ?? null,
         ]);

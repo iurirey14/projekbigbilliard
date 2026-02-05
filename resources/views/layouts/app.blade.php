@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Billiard Management System')</title>
     <link rel="stylesheet" href="{{ asset('css/billiard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -16,39 +17,88 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f5f5;
             color: #333;
+            display: flex;
         }
 
-        .navbar {
+        .sidebar {
+            width: 250px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 1rem 2rem;
             color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
         }
 
-        .navbar h1 {
-            font-size: 1.8rem;
+        .sidebar h1 {
+            font-size: 1.5rem;
             font-weight: bold;
+            padding: 0 1.5rem 1rem 1.5rem;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 1.5rem;
         }
 
-        .nav-links {
+        .sidebar-menu {
             display: flex;
-            gap: 2rem;
-            align-items: center;
+            flex-direction: column;
+            gap: 0;
+            padding: 0;
+            list-style: none;
         }
 
-        .nav-links a {
+        .sidebar-menu a {
             color: white;
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            transition: background 0.3s;
+            padding: 1rem 1.5rem;
+            display: block;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
         }
 
-        .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .sidebar-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: white;
+            padding-left: 1.5rem;
+        }
+
+        .sidebar-menu a i {
+            margin-right: 0.8rem;
+            width: 20px;
+        }
+
+        .sidebar-user {
+            padding: 1.5rem;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            margin-top: auto;
+        }
+
+        .sidebar-user-name {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .sidebar-logout {
+            display: block;
+            margin-top: 0.8rem;
+            padding: 0.5rem 0;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-logout:hover {
+            opacity: 0.8;
+        }
+
+        main {
+            margin-left: 250px;
+            flex: 1;
+            width: calc(100% - 250px);
         }
 
         .container {
@@ -280,45 +330,87 @@
             display: flex;
             justify-content: space-between;
         }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                position: relative;
+                padding: 1rem 0;
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .sidebar-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .sidebar-menu a {
+                padding: 0.8rem 1rem;
+                flex: 1;
+                min-width: 150px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <h1>🎱 Billiard Management</h1>
-        <div class="nav-links">
-            <a href="{{ route('home') }}">Home</a>
-            <a href="{{ route('tables.index') }}">Meja Billiard</a>
-            <a href="{{ route('bookings.index') }}">Pesanan Saya</a>
-            <a href="{{ route('payments.list') }}">Pembayaran</a>
-            @if (Auth::check())
-                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <h1>🎱 Billiard</h1>
+        <nav>
+            <ul class="sidebar-menu">
+                <li><a href="{{ route('home') }}"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="{{ route('tables.index') }}"><i class="fas fa-dice-five"></i> Meja Billiard</a></li>
+                <li><a href="{{ route('bookings.index') }}"><i class="fas fa-calendar-check"></i> Pesanan Saya</a></li>
+                <li><a href="{{ route('payments.list') }}"><i class="fas fa-credit-card"></i> Pembayaran</a></li>
+            </ul>
+        </nav>
+
+        @if (Auth::check())
+            <div class="sidebar-user">
+                <span class="sidebar-user-name"><i class="fas fa-user-circle"></i> {{ Auth::user()->name }}</span>
+                <form method="POST" action="{{ route('logout') }}" style="display: block;">
                     @csrf
-                    <button type="submit" class="btn btn-danger" style="padding: 0.5rem 1rem;">Logout</button>
+                    <button type="submit" class="sidebar-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </form>
-                <span>{{ Auth::user()->name }}</span>
-            @else
-                <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+            </div>
+        @else
+            <div class="sidebar-user">
+                <a href="{{ route('login') }}" class="sidebar-logout" style="display: block; text-align: center;">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            </div>
+        @endif
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger">{{ $error }}</div>
+                @endforeach
             @endif
+
+            @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            @yield('content')
         </div>
-    </div>
 
-    <div class="container">
-        @if ($errors->any())
-            @foreach ($errors->all() as $error)
-                <div class="alert alert-danger">{{ $error }}</div>
-            @endforeach
-        @endif
-
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
-        @yield('content')
-    </div>
-
-    <div class="footer">
-        <p>&copy; 2026 Billiard Management System. All rights reserved.</p>
-    </div>
+        <div class="footer">
+            <p>&copy; 2026 Billiard Management System. All rights reserved.</p>
+        </div>
+    </main>
 
     <script src="{{ asset('js/billiard.js') }}"></script>
 </body>

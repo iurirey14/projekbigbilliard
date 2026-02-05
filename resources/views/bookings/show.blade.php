@@ -27,6 +27,10 @@
                     <span>{{ $booking->duration_hours ?? '-' }} jam</span>
                 </div>
                 <div class="summary-item">
+                    <span><strong>Kategori:</strong></span>
+                    <span><span class="badge" style="background: {{ $booking->category === 'vip' ? '#ffd700' : '#87ceeb' }}; color: #333;">{{ ucfirst($booking->category ?? 'Regular') }}</span></span>
+                </div>
+                <div class="summary-item">
                     <span><strong>Harga per Jam:</strong></span>
                     <span>Rp {{ number_format($booking->table?->price_per_hour ?? 0, 0, ',', '.') }}</span>
                 </div>

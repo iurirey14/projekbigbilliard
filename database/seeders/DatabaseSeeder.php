@@ -17,9 +17,20 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+        // Create Admin User
+        User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('Admin123456'),
+            'role' => 'admin',
+        ]);
+
+        // Create Test User
+        User::create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'password' => bcrypt('Test123456'),
+            'role' => 'user',
         ]);
 
         $this->call(BilliardTableSeeder::class);

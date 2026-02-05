@@ -52,33 +52,38 @@
                 
                 <div class="form-group">
                     <label>Metode Pembayaran</label>
+                    <link href="https://example.com/styles.css">
                     <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <label style="display: flex; align-items: center; border: 1px solid #ddd; padding: 1rem; border-radius: 5px; cursor: pointer;">
+                        <label style="display: flex; align-items: center; border: 1px solid #ddd; padding: 1rem; border-radius: 5px; cursor: pointer; transition: all 0.3s;">
                             <input type="radio" name="payment_method" value="transfer_bank" required>
+                            <img src="{{ asset('images/images.jpg') }}" alt="Transfer Bank" style="margin-left: 1rem; width: 50px; height: 50px; flex-shrink: 0;">
                             <span style="margin-left: 1rem;">
                                 <strong>Transfer Bank</strong>
                                 <p style="margin: 0; color: #666; font-size: 0.9rem;">Transfer ke rekening bank kami</p>
                             </span>
                         </label>
 
-                        <label style="display: flex; align-items: center; border: 1px solid #ddd; padding: 1rem; border-radius: 5px; cursor: pointer;">
+                        <label style="display: flex; align-items: center; border: 1px solid #ddd; padding: 1rem; border-radius: 5px; cursor: pointer; transition: all 0.3s;">
                             <input type="radio" name="payment_method" value="credit_card" required>
+                            <img src="{{ asset('images/blackcard.webp') }}" alt="Kartu Kredit" style="margin-left: 1rem; width: 50px; height: 50px; flex-shrink: 0;">
                             <span style="margin-left: 1rem;">
                                 <strong>Kartu Kredit</strong>
                                 <p style="margin: 0; color: #666; font-size: 0.9rem;">Visa, Mastercard, American Express</p>
                             </span>
                         </label>
 
-                        <label style="display: flex; align-items: center; border: 1px solid #ddd; padding: 1rem; border-radius: 5px; cursor: pointer;">
+                        <label style="display: flex; align-items: center; border: 1px solid #ddd; padding: 1rem; border-radius: 5px; cursor: pointer; transition: all 0.3s;">
                             <input type="radio" name="payment_method" value="e_wallet" required>
+                            <img src="{{ asset('images/images.png') }}" alt="E-Wallet" style="margin-left: 1rem; width: 50px; height: 50px; flex-shrink: 0;">
                             <span style="margin-left: 1rem;">
                                 <strong>E-Wallet</strong>
                                 <p style="margin: 0; color: #666; font-size: 0.9rem;">GCash, PayMaya, OVO, DANA</p>
                             </span>
                         </label>
 
-                        <label style="display: flex; align-items: center; border: 1px solid #ddd; padding: 1rem; border-radius: 5px; cursor: pointer;">
+                        <label style="display: flex; align-items: center; border: 1px solid #ddd; padding: 1rem; border-radius: 5px; cursor: pointer; transition: all 0.3s;">
                             <input type="radio" name="payment_method" value="cash" required>
+                            <img src="{{ asset('images/tl.jpg') }}" alt="Tunai" style="margin-left: 1rem; width: 50px; height: 50px; flex-shrink: 0;">
                             <span style="margin-left: 1rem;">
                                 <strong>Tunai</strong>
                                 <p style="margin: 0; color: #666; font-size: 0.9rem;">Pembayaran saat kedatangan</p>

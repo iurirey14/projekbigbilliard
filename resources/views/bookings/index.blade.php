@@ -14,6 +14,7 @@
                         <th>Tanggal</th>
                         <th>Waktu</th>
                         <th>Durasi</th>
+                        <th>Kategori</th>
                         <th>Total Harga</th>
                         <th>Status</th>
                         <th>Pembayaran</th>
@@ -27,6 +28,11 @@
                             <td>{{ $booking->booking_date?->format('d/m/Y') ?? '-' }}</td>
                             <td>{{ $booking->start_time ?? '-' }} - {{ $booking->end_time ?? '-' }}</td>
                             <td>{{ $booking->duration_hours ?? '-' }} jam</td>
+                            <td>
+                                <span class="badge" style="background: {{ $booking->category === 'vip' ? '#ffd700' : '#87ceeb' }}; color: #333; padding: 0.3rem 0.8rem; border-radius: 20px;">
+                                    {{ ucfirst($booking->category ?? 'Regular') }}
+                                </span>
+                            </td>
                             <td>Rp {{ number_format($booking->total_price ?? 0, 0, ',', '.') }}</td>
                             <td>
                                 <span class="badge badge-{{ str_replace('_', '-', $booking->status ?? 'pending') }}">
